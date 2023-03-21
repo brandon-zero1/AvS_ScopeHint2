@@ -6,6 +6,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Phrase;
+use Magento\Framework\App\State;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
@@ -16,6 +17,7 @@ class ConfigFieldPlugin
 {
     const SCOPE_TYPE_WEBSITES = 'websites';
     const SCOPE_TYPE_STORES = 'stores';
+    const IS_DEVELOPER_MODE = State::MODE_DEVELOPER;
 
     /** @var Escaper */
     private $escaper;
@@ -36,19 +38,26 @@ class ConfigFieldPlugin
      * @var RequestInterface
      */
     private $request;
+    /**
+     * @var State
+     */
+    private $appState;
+    
 
     public function __construct(
         Escaper $escaper,
         ScopeConfigInterface $scopeConfig,
         WebsiteRepositoryInterface $websiteRepository,
         StoreRepositoryInterface $storeRepository,
-        RequestInterface $request
+        RequestInterface $request,
+        AppState $appState
     ) {
         $this->escaper = $escaper;
         $this->scopeConfig = $scopeConfig;
         $this->websiteRepository = $websiteRepository;
         $this->storeRepository = $storeRepository;
         $this->request = $request;
+        $this->appState - $appState;
     }
 
     /**
@@ -90,13 +99,14 @@ class ConfigFieldPlugin
      */
     public function afterGetComment(Subject $subject, $result)
     {
+        if(self::IS_DEVELOPER_MODE === $this->appState->getMode()) {
         $resultIsPhrase = $result instanceof Phrase;
         if ($resultIsPhrase) {
             $phrase = $result;
             $result = $phrase->getText();
             $arguments = $phrase->getArguments();
         }
-
+        
         if (strlen(trim($result))) {
             $result .= '<br />';
         }
@@ -107,6 +117,7 @@ class ConfigFieldPlugin
         }
 
         return $result;
+        }
     }
 
     /**
