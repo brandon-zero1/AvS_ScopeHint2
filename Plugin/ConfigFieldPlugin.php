@@ -57,7 +57,7 @@ class ConfigFieldPlugin
         $this->websiteRepository = $websiteRepository;
         $this->storeRepository = $storeRepository;
         $this->request = $request;
-        $this->state - $appState;
+        $this->state = $appState;
     }
 
     /**
@@ -99,7 +99,7 @@ class ConfigFieldPlugin
      */
     public function afterGetComment(Subject $subject, $result)
     {
-        if(self::IS_DEVELOPER_MODE === $this->appState->getMode()) {
+        if(self::IS_DEVELOPER_MODE === $this->state->getMode()) {
         $resultIsPhrase = $result instanceof Phrase;
         if ($resultIsPhrase) {
             $phrase = $result;
