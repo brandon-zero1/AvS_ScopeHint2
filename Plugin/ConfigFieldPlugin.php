@@ -50,14 +50,14 @@ class ConfigFieldPlugin
         WebsiteRepositoryInterface $websiteRepository,
         StoreRepositoryInterface $storeRepository,
         RequestInterface $request,
-        AppState $appState
+        State $appState
     ) {
         $this->escaper = $escaper;
         $this->scopeConfig = $scopeConfig;
         $this->websiteRepository = $websiteRepository;
         $this->storeRepository = $storeRepository;
         $this->request = $request;
-        $this->appState - $appState;
+        $this->state - $appState;
     }
 
     /**
